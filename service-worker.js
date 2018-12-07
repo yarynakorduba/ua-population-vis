@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/yarynakorduba/yarynakorduba.github.io/precache-manifest.de6fdb8dbae4e229cf53a7fb266687c8.js"
+  "/yarynakorduba/ua-population-vis/precache-manifest.989520b2007f0d3d5a68019e51215623.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/yarynakorduba/yarynakorduba.github.io/index.html", {
+workbox.routing.registerNavigationRoute("/yarynakorduba/ua-population-vis/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
