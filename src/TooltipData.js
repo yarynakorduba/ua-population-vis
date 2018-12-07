@@ -1,5 +1,5 @@
 import React from "react"
-import { Tooltip, withTooltip, localPoint } from "@vx/vx"
+import { withTooltip } from "@vx/vx"
 import { withHandlers, compose } from "recompose"
 
 import "./Tooltip.css"
@@ -28,12 +28,12 @@ const TooltipContainer = ({
   >
     {tooltipOpen && (
       <>
-        <div className="Tooltip__line" style={{ left: tooltipLeft + 75 }} />
+        <div className="Tooltip__line" style={{ left: tooltipLeft }} />
         <div
           className="Tooltip__container"
           style={{
             top: yMax - 75,
-            left: tooltipLeft + 75
+            left: tooltipLeft,
           }}
         >
           <div>
@@ -61,10 +61,10 @@ export default compose(
       const x = clientX - target.getBoundingClientRect().left
       const selectedAge = Math.round(xScale.invert(x))
       const tooltipData = data.find(({ year: y, age }) => y === year && age === selectedAge)
-
+      console.log("margin ===> ", margin)
       showTooltip({
         tooltipData,
-        tooltipLeft: x - margin.left
+        tooltipLeft: x
       })
     }
   })

@@ -1,14 +1,12 @@
 import React from "react"
-import { AxisBottom, AxisLeft } from "@vx/axis"
-import { withParentSize } from "@vx/vx"
+import { withParentSize, Group , AxisBottom, AxisLeft, AreaClosed } from "@vx/vx"
 import { scaleLinear, csv, max, format, curveMonotoneX } from "d3"
-import { Group } from "@vx/vx"
-
 import { branch, compose, defaultProps, renderComponent, withProps, withState } from "recompose"
-
-import { AreaClosed } from "@vx/shape"
 import TooltipData from "./TooltipData"
+import Legend from "./Legend"
+
 import "./Diagram.css"
+
 
 const MenArea = ({ xScale, ...props }) => (
   <AreaClosed
@@ -97,14 +95,14 @@ const Chart = ({
         </Group>
       </Group>
     </svg>
-
+    <Legend/>
     <TooltipData width={width} height={height} margin={margin} xScale={xScale} data={data} year={year} />
   </div>
 )
 
 const enhance = compose(
   defaultProps({
-    margin: { top: 40, bottom: 40, left: 80, right: 40 },
+    margin: { top: 100, bottom: 40, left: 200, right: 400 },
     year: 1989
   }),
   withState("data", "setData"),

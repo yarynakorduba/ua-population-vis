@@ -2,7 +2,8 @@
 }
 
 .Layout__header {
-  text-align: center;  
+  margin-left: 200px;
+  margin-bottom: 0;
 }
 
 .Layout__chart-placeholder {
