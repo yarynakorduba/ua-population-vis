@@ -1,8 +1,9 @@
 import React from "react"
-import Diagram from "./Diagram"
+import Chart from "../Chart"
 import { compose, defaultProps, withState } from "recompose"
 import "./Layout.css"
-import YearRange from "./YearRange"
+import YearRange from "../YearRange"
+
 
 const Layout = ({ year, setYear, Diagram, Range }) => (
   <div className="Layout">
@@ -18,7 +19,7 @@ const Layout = ({ year, setYear, Diagram, Range }) => (
 
 export default compose(
   defaultProps({
-    Diagram: Diagram,
+    Diagram: Chart,
     Range: YearRange
   }),
   withState("year", "setYear", 1989)

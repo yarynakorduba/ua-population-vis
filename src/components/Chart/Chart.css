@@ -1,0 +1,21 @@
+.Chart {
+  position: relative;
+}
+
+.Chart__women-area {
+  stroke: #c0392b;
+  stroke-width: 1;
+  fill: rgba(231, 76, 60, 0.4);
+}
+
+.Chart__men-area {
+  stroke: #2980b9;
+  stroke-width: 1;
+  fill: rgba(41, 128, 185, 0.4);
+}
+
+.Chart__common-area {
+  stroke: rgba(44, 62, 80, 1);
+  stroke-width: 2;
+  fill: none;
+}

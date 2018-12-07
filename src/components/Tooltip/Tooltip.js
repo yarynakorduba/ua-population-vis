@@ -1,8 +1,10 @@
 import React from "react"
 import { Tooltip, withTooltip, localPoint } from "@vx/vx"
 import { withHandlers, compose } from "recompose"
-
 import "./Tooltip.css"
+
+
+
 
 const TooltipContainer = ({
   handleTooltip,

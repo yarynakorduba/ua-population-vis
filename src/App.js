@@ -1,13 +1,10 @@
-import React, { Component } from 'react';
-import Layout from "./Layout"
-
+import React, { Component } from "react"
+import Layout from "./components/Layout"
 
 class App extends Component {
   render() {
-    return (
-      <Layout/>
-    );
+    return <Layout />
   }
 }
 
-export default App;
+export default App
