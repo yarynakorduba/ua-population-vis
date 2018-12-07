@@ -1,11 +1,11 @@
 import React from "react"
 import { AxisBottom, AxisLeft } from "@vx/axis"
-import { withParentSize } from "@vx/vx"
+import { withParentSize, Bar } from "@vx/vx"
 import { scaleLinear, csv, max, format, curveMonotoneX } from "d3"
 import { Group } from "@vx/vx"
 import { localPoint } from "@vx/vx"
 import { bisector } from "d3-array"
-import { withTooltip } from "@vx/vx"
+import { withTooltip, Tooltip } from "@vx/vx"
 
 import { branch, compose, defaultProps, renderComponent, withHandlers, withProps, withState } from "recompose"
 
@@ -33,13 +33,13 @@ const WomenArea = ({ xScale, ...props }) => (
     curve={curveMonotoneX}
   />
 )
-const CommonArea = ({ xScale, yScale, ...props }) => (
-  <LinePath
+const CommonArea = ({ xScale, ...props }) => (
+  <AreaClosed
     {...props}
-    y={({ women, men }) => yScale(women + men)}
+    y={({ women, men }) => props.yScale(women + men)}
     stroke={"#2c3e50"}
     strokeWidth={2}
-    fill={"none"}
+    fill={"white"}
     curve={curveMonotoneX}
   />
 )
@@ -57,10 +57,10 @@ const Chart = ({
   tooltipTop,
   handleTooltip,
   showTooltip,
-  hideTooltip
+  hideTooltip,
+  tooltipData
 }) => {
   const yMax = height - margin.top - margin.bottom
-
   return (
     <div>
       <svg width={width} height={height}>
@@ -82,7 +82,7 @@ const Chart = ({
             axisClassName="axis-class"
             labelClassName="axis-label-class"
             tickClassName="tick-label-class"
-            label="Bottom axis label"
+            label="Age"
             stroke="#333333"
             tickStroke="#333333"
           />
@@ -90,31 +90,69 @@ const Chart = ({
             scale={yScale}
             top={margin.top}
             left={margin.left}
-            label="Left axis label"
+            label="Population"
             labelProps={{ fontSize: 12, fill: "black" }}
             tickFormat={format("~s")}
           />
           <Group
             top={margin.top}
             left={margin.left}
-            onMouseMove={event => handleTooltip({ event, data, xScale, yScale, showTooltip })}
-            onTouchMove={event => handleTooltip({ event, data, xScale, yScale, showTooltip })}
-            onMouseLeave={() => hideTooltip()}
           >
+            <CommonArea xScale={xScale} data={data} yScale={yScale} x={({ age }) => xScale(age)} />
             <WomenArea xScale={xScale} data={data} yScale={yScale} x={({ age }) => xScale(age)} />
             <MenArea xScale={xScale} data={data} yScale={yScale} x={({ age }) => xScale(age)} />
-            <CommonArea xScale={xScale} data={data} yScale={yScale} x={({ age }) => xScale(age)} />
-            <LineTooltip yMax={yMax} tooltipLeft={tooltipLeft} tooltipTop={tooltipTop}/>
+            <Bar
+              x={0}
+              y={0}
+              width={width}
+              height={height}
+              fill="transparent"
+              rx={14}
+              data={data}
+              onMouseMove={event => handleTooltip({ event, data, xScale, yScale, showTooltip })}
+              onTouchMove={event => handleTooltip({ event, data, xScale, yScale, showTooltip })}
+              onMouseLeave={() => hideTooltip()}
+            />
+            <LineTooltip
+              yMax={yMax}
+              tooltipLeft={tooltipLeft}
+              tooltipTop={tooltipTop}
+              top={margin.top}
+              left={margin.left}
+            />
           </Group>
         </Group>
       </svg>
+      {tooltipData && (
+        <>
+          <Tooltip
+            top={yMax-75}
+            left={tooltipLeft+75}
+          ><div style={{width: 10, height: 10, background: "black",display: "inline-block" }}/>
+            {` common: ${tooltipData.men + tooltipData.women}`}
+          </Tooltip>
+          <Tooltip
+            top={yMax-25}
+            left={tooltipLeft+75}
+          ><div style={{width: 10, height: 10, background: "blue",display: "inline-block" }}/>
+            {` men: ${tooltipData.men}`}
+          </Tooltip>
+          <Tooltip
+            top={yMax-50}
+            left={tooltipLeft+75}
+
+          ><div style={{width: 10, height: 10, background: "red",display: "inline-block" }}/>
+            {` women: ${tooltipData.women}`}
+          </Tooltip>
+        </>
+      )}
     </div>
   )
 }
 
 const enhance = compose(
   defaultProps({
-    margin: { top: 40, bottom: 40, left: 40, right: 40 },
+    margin: { top: 40, bottom: 40, left: 80, right: 40 },
     year: 1989
   }),
   withState("data", "setData"),
@@ -135,10 +173,7 @@ const enhance = compose(
   withProps(({ data, parentHeight: height, parentWidth: width, margin }) => ({
     yScale: scaleLinear()
       .range([height - margin.top - margin.bottom, 0])
-      .domain([0, max(data.map(({ men, women }) => men + women))]),
-    xScale: scaleLinear()
-      .range([0, width - margin.left - margin.right])
-      .domain([0, 80])
+      .domain([0, max(data.map(({ men, women }) => men + women))])
   })),
   withProps(({ data, year }) => ({ data: data.filter(data => data.year === year) })),
   withProps(({ data, parentWidth: width, margin }) => ({
@@ -151,18 +186,18 @@ const enhance = compose(
       const { x } = localPoint(event)
       const x0 = xScale.invert(x)
       const index = bisectDate(data, x0, 1)
-      console.log("===>",index, x0)
       const d0 = data[index - 1]
       const d1 = data[index]
       let d = d0
       if (d1 && d1.age) {
         d = x0 - d0.age > d1.age - x0 ? d1 : d0
       }
-      showTooltip({
+      const a = showTooltip({
         tooltipData: d,
         tooltipLeft: x,
-        tooltipTop: yScale(d.men)
+        tooltipTop: yScale(d.men + d.women)
       })
+      return a
     }
   })
 )

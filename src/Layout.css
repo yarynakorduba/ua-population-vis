@@ -1,5 +1,10 @@
 .Layout {
 }
+
+.Layout__header {
+  text-align: center;  
+}
+
 .Layout__chart-placeholder {
   height: 400px;
 }

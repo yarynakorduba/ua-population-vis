@@ -6,7 +6,7 @@ import YearRange from "./YearRange"
 
 const Layout = ({ year, setYear, Diagram, Range }) => (
   <div className="Layout">
-    {year}
+    <h2 className="Layout__header">{year}</h2>
     <div className="Layout__chart-placeholder">
       <Diagram year={year} />
     </div>
