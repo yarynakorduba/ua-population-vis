@@ -1,0 +1,22 @@
+.Tooltip {
+  position: absolute;
+  z-index: 1;
+}
+
+.Tooltip__container {
+  position: absolute;
+  width: 150px;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.Tooltip__line {
+  pointer-events: none;
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  width: 1px;
+
+  background: black;
+}
