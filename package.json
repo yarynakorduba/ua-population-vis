@@ -1,0 +1,37 @@
+{
+  "name": "datavis",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@vx/axis": "0.0.181",
+    "@vx/curve": "0.0.165",
+    "@vx/grid": "0.0.181",
+    "@vx/group": "0.0.170",
+    "@vx/mock-data": "0.0.179",
+    "@vx/scale": "0.0.179",
+    "@vx/shape": "0.0.181",
+    "@vx/vx": "0.0.181",
+    "d3": "^5.7.0",
+    "ramda": "^0.26.1",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-scripts": "2.1.1",
+    "recompose": "^0.30.0",
+    "d3-array": "latest"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
