@@ -1,6 +1,6 @@
 import React from "react"
 import { Group, withParentSize, AxisBottom, AxisLeft, GridRows, GridColumns, AxisTop, AxisRight } from "@vx/vx"
-import { scaleLinear, csv, max, format } from "d3"
+import { scaleLinear, csv, max, format, sum } from "d3"
 
 import { branch, compose, defaultProps, renderComponent, withProps, withState } from "recompose"
 
@@ -29,9 +29,11 @@ const Chart = ({
 
   yScale,
 
-  year
+  year,
+  totalYearValue
 }) => (
   <div className="Chart">
+    <div className="Chart__total-year-value">Total amount for {year}: {totalYearValue}</div>
     <Tooltip width={width} height={height} margin={margin} xScale={xScale} yScale={yScale} data={data} year={year}>
       <svg width={width} height={height}>
         <Group top={margin.top} left={margin.left}>
@@ -103,7 +105,8 @@ const enhance = compose(
 
     xScaleYears: scaleLinear()
       .range([0, width - margin.left - margin.right])
-      .domain([year, year - 79])
+      .domain([year, year - 79]),
+    totalYearValue: sum(data, d => d.men + d.women)
   }))
 )
 

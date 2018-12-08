@@ -19,3 +19,8 @@
   stroke-width: 2;
   fill: none;
 }
+
+.Chart__total-year-value {
+  text-align: center;
+}
+

@@ -1,0 +1,27 @@
+.Legend {
+    display: inline-block;
+    text-align: center;
+}
+
+.Legend__row {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.Legend__indicator {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+
+.Legend__indicator_common {
+    background: black
+}
+
+.Legend__indicator_men {
+    background: #2980b9;
+}
+
+.Legend__indicator_women {
+    background: #c0392b;
+}
