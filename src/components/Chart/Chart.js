@@ -4,7 +4,15 @@ import { scaleLinear, csv, max, format } from "d3"
 
 import { branch, compose, defaultProps, renderComponent, withProps, withState } from "recompose"
 
-import Tooltip from "../Tooltip"
+import Tooltip, {
+  SVGContext,
+  MenTooltipHTML,
+  WomenTooltipHTML,
+  TotalTooltipHTML,
+  MenTooltipSVG,
+  WomenTooltipSVG,
+  TotalTooltipSVG
+} from "../Tooltip/Tooltip"
 import "./Chart.css"
 import { CommonArea, MenArea, WomenArea } from "./Areas"
 
@@ -15,31 +23,36 @@ const Chart = ({
   data,
   xScale,
   yScale,
-  tooltipLeft,
-  tooltipTop,
-  handleTooltip,
 
-  hideTooltip,
-  tooltipData,
-  tooltipOpen,
   year
 }) => (
   <div className="Chart">
-    <svg width={width} height={height}>
-      <Group top={margin.top} left={margin.left}>
-        <GridRows scale={yScale} width={width - margin.left - margin.right} />
-        <GridColumns scale={xScale} height={height - margin.top - margin.bottom} />
+    <Tooltip width={width} height={height} margin={margin} xScale={xScale} yScale={yScale} data={data} year={year}>
+      <svg width={width} height={height}>
+        <Group top={margin.top} left={margin.left}>
+          <GridRows scale={yScale} width={width - margin.left - margin.right} />
+          <GridColumns scale={xScale} height={height - margin.top - margin.bottom} />
 
-        <AxisBottom scale={xScale} top={height - margin.bottom - margin.top} label="Age" />
-        <AxisLeft scale={yScale} label="Population" tickFormat={format("~s")} />
+          <AxisBottom scale={xScale} top={height - margin.bottom - margin.top} label="Age" />
+          <AxisLeft scale={yScale} label="Population" tickFormat={format("~s")} />
 
-        <CommonArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
-        <WomenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
-        <MenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
-      </Group>
-    </svg>
+          <CommonArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
+          <WomenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
+          <MenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
 
-    <Tooltip width={width} height={height} margin={margin} xScale={xScale} data={data} year={year} />
+          <SVGContext />
+          <MenTooltipSVG />
+          <WomenTooltipSVG />
+          <TotalTooltipSVG />
+        </Group>
+      </svg>
+
+      <MenTooltipHTML />
+      <WomenTooltipHTML />
+      <TotalTooltipHTML />
+    </Tooltip>
+
+    {/*<Tooltip width={width} height={height} margin={margin} xScale={xScale} data={data} year={year} />*/}
   </div>
 )
 

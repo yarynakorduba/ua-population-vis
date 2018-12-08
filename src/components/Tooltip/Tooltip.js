@@ -1,73 +1,111 @@
 import React from "react"
-import { Tooltip, withTooltip, localPoint } from "@vx/vx"
-import { withHandlers, compose } from "recompose"
+import { Tooltip, withTooltip, localPoint, Bar, Group, Line } from "@vx/vx"
+import { withHandlers, compose, fromRenderProps, branch, renderNothing, withProps } from "recompose"
 import "./Tooltip.css"
+import { format } from "d3"
 
+const numberFormat = format("~s")
 
+const { Consumer, Provider } = React.createContext({})
 
+export default withTooltip(({ children, ...props }) => <Provider value={props}>{children}</Provider>)
 
-const TooltipContainer = ({
-  handleTooltip,
-  hideTooltip,
-  width,
-  height,
-  tooltipData,
-  margin,
-  tooltipLeft,
-  tooltipOpen,
-  yMax
-}) => (
-  <div
-    className="Tooltip"
-    onMouseMove={handleTooltip}
-    onMouseLeave={hideTooltip}
-    style={{
-      width: width - margin.left - margin.right,
-      height: height - margin.top - margin.bottom,
-      left: margin.left,
-      bottom: margin.bottom
-    }}
-  >
-    {tooltipOpen && (
-      <>
-        <div className="Tooltip__line" style={{ left: tooltipLeft + 75 }} />
-        <div
-          className="Tooltip__container"
-          style={{
-            top: yMax - 75,
-            left: tooltipLeft + 75
-          }}
-        >
-          <div>
-            <div style={{ width: 10, height: 10, background: "black", display: "inline-block" }} />
-            {` common: ${tooltipData.men + tooltipData.women}`}
-          </div>
-          <div>
-            <div style={{ width: 10, height: 10, background: "blue", display: "inline-block" }} />
-            {` men: ${tooltipData.men}`}
-          </div>
-          <div>
-            <div style={{ width: 10, height: 10, background: "red", display: "inline-block" }} />
-            {` women: ${tooltipData.women}`}
-          </div>
-        </div>
-      </>
-    )}
-  </div>
-)
-
-export default compose(
-  withTooltip, // emit showTooltip
+export const SVGContext = compose(
+  fromRenderProps(Consumer, props => props),
   withHandlers({
-    handleTooltip: ({ margin, xScale, data, year, showTooltip }) => ({ target, clientX }) => {
-      const x = clientX - target.getBoundingClientRect().left
-      const selectedAge = Math.round(xScale.invert(x))
+    handleTooltip: ({ margin, xScale, data, year, showTooltip }) => event => {
+      const { x } = localPoint(event)
+      const selectedAge = Math.round(xScale.invert(x - margin.left))
       const tooltipData = data.find(({ year: y, age }) => y === year && age === selectedAge)
-
       showTooltip({
         tooltipData,
-        tooltipLeft: x - margin.left
+        tooltipLeft: xScale(selectedAge)
       })
     }
   })
-)(TooltipContainer)
+)(({ width, height, margin, hideTooltip, handleTooltip, tooltipOpen, tooltipLeft }) => (
+  <Group>
+    <Bar
+      x={0}
+      y={0}
+      width={width - margin.left - margin.top}
+      height={height - margin.top - margin.bottom}
+      fill={"transparent"}
+      onMouseMove={handleTooltip}
+      onMouseLeave={hideTooltip}
+    />
+    {tooltipOpen && (
+      <Line
+        from={{ x: tooltipLeft, y: 0 }}
+        to={{ x: tooltipLeft, y: height - margin.top - margin.bottom }}
+        stroke="black"
+        strokeWidth={1}
+        style={{ pointerEvents: "none" }}
+        strokeDasharray="2,2"
+      />
+    )}
+  </Group>
+))
+
+export const HTMLContext = compose(
+  fromRenderProps(Consumer, props => props),
+  branch(({ tooltipOpen }) => !tooltipOpen, renderNothing)
+)
+
+const menTooltip = compose(HTMLContext, withProps(({ yScale, tooltipData: { men } }) => ({ top: yScale(men) })))
+const womenTooltip = compose(HTMLContext, withProps(({ yScale, tooltipData: { women } }) => ({ top: yScale(women) })))
+const commonTooltip = compose(
+  HTMLContext,
+  withProps(({ yScale, tooltipData: { women, men } }) => ({ top: yScale(women + men) }))
+)
+
+export const MenTooltipSVG = menTooltip(({ top, tooltipLeft }) => (
+  <circle
+    cy={top - 1}
+    cx={tooltipLeft}
+    r={4}
+    fill="rgba(41, 128, 185, 1.000)"
+    stroke="white"
+    strokeWidth={2}
+    style={{ pointerEvents: "none" }}
+  />
+))
+export const MenTooltipHTML = menTooltip(({ tooltipData: { men }, margin, tooltipLeft, top }) => (
+  <Tooltip top={top + 26} left={tooltipLeft - 5}>
+    {numberFormat(men)}
+  </Tooltip>
+))
+
+export const WomenTooltipHTML = womenTooltip(({ tooltipData: { women }, margin, tooltipLeft, top }) => (
+  <Tooltip top={top + 26} left={tooltipLeft + 90}>
+    {numberFormat(women)}
+  </Tooltip>
+))
+export const WomenTooltipSVG = womenTooltip(({ top, tooltipLeft }) => (
+  <circle
+    cy={top - 1}
+    cx={tooltipLeft}
+    r={4}
+    fill="rgba(231, 76, 60, 1.000)"
+    stroke="white"
+    strokeWidth={2}
+    style={{ pointerEvents: "none" }}
+  />
+))
+
+export const TotalTooltipSVG = commonTooltip(({ top, tooltipLeft }) => (
+  <circle
+    cy={top - 1}
+    cx={tooltipLeft}
+    r={4}
+    fill="rgba(0, 0, 0, 1.000)"
+    stroke="white"
+    strokeWidth={2}
+    style={{ pointerEvents: "none" }}
+  />
+))
+export const TotalTooltipHTML = commonTooltip(({ tooltipData: { women, men }, top, tooltipLeft }) => (
+  <Tooltip top={top} left={tooltipLeft}>
+    {numberFormat(men + women)}
+  </Tooltip>
+))
