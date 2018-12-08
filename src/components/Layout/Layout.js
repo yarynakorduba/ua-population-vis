@@ -4,15 +4,13 @@ import { compose, defaultProps, withState } from "recompose"
 import "./Layout.css"
 import YearRange from "../YearRange"
 
-
 const Layout = ({ year, setYear, Diagram, Range }) => (
   <div className="Layout">
-    <h2 className="Layout__header">{year}</h2>
+    <div className="Layout__range-placeholder">
+      <Range value={year} onChange={setYear} />
+    </div>
     <div className="Layout__chart-placeholder">
       <Diagram year={year} />
-    </div>
-    <div className="Layout__range-placeholder">
-      <Range onChange={setYear} />
     </div>
   </div>
 )

@@ -47,15 +47,18 @@ export const SVGContext = compose(
   </Group>
 ))
 
-export const HTMLContext = compose(
+export const tooltipContext = compose(
   fromRenderProps(Consumer, props => props),
   branch(({ tooltipOpen }) => !tooltipOpen, renderNothing)
 )
 
-const menTooltip = compose(HTMLContext, withProps(({ yScale, tooltipData: { men } }) => ({ top: yScale(men) })))
-const womenTooltip = compose(HTMLContext, withProps(({ yScale, tooltipData: { women } }) => ({ top: yScale(women) })))
+const menTooltip = compose(tooltipContext, withProps(({ yScale, tooltipData: { men } }) => ({ top: yScale(men) })))
+const womenTooltip = compose(
+  tooltipContext,
+  withProps(({ yScale, tooltipData: { women } }) => ({ top: yScale(women) }))
+)
 const commonTooltip = compose(
-  HTMLContext,
+  tooltipContext,
   withProps(({ yScale, tooltipData: { women, men } }) => ({ top: yScale(women + men) }))
 )
 
@@ -104,8 +107,20 @@ export const TotalTooltipSVG = commonTooltip(({ top, tooltipLeft }) => (
     style={{ pointerEvents: "none" }}
   />
 ))
-export const TotalTooltipHTML = commonTooltip(({ tooltipData: { women, men }, top, tooltipLeft }) => (
-  <Tooltip top={top} left={tooltipLeft}>
+export const TotalTooltipHTML = commonTooltip(({ tooltipData: { women, men }, top, margin, tooltipLeft }) => (
+  <Tooltip top={top + margin.top - 35} left={tooltipLeft + margin.left - 30}>
     {numberFormat(men + women)}
+  </Tooltip>
+))
+
+export const AgeTooltipHTML = tooltipContext(({ tooltipData, height, margin, tooltipLeft }) => (
+  <Tooltip top={height - margin.bottom} left={tooltipLeft + margin.left - 13}>
+    {tooltipData.age}
+  </Tooltip>
+))
+
+export const BirthdayTooltipHTML = tooltipContext(({ tooltipData, height, margin, tooltipLeft, year }) => (
+  <Tooltip top={margin.top - 20} left={tooltipLeft + margin.left - 23}>
+    {year - tooltipData.age}
   </Tooltip>
 ))
