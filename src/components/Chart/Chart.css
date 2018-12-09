@@ -24,3 +24,6 @@
   text-align: center;
 }
 
+.Chart__tick line {
+  stroke: #eaf0f6;
+}
