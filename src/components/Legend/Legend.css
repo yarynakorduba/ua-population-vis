@@ -1,5 +1,5 @@
 .Legend {
-    display: inline-block;
+    display: block;
     text-align: center;
 }
 
@@ -27,6 +27,6 @@
 }
 
 .Legend__indicator_death-rate {
-    background: linear-gradient(#bdc3c7, #2c3e50);
+    background: linear-gradient(to right, #bdc3c7, #2c3e50);
     width: 100px;
 }
