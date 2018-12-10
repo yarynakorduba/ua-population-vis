@@ -25,3 +25,8 @@
 .Legend__indicator_women {
     background: #c0392b;
 }
+
+.Legend__indicator_death-rate {
+    background: linear-gradient(#bdc3c7, #2c3e50);
+    width: 100px;
+}
