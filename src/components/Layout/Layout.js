@@ -7,7 +7,7 @@ import Legend from "../Legend"
 
 const Layout = ({ year, setYear, Diagram, Range, Legend }) => (
   <div className="Layout">
-    <h3 className="Layout__header">Ukrainian population changes through 1989-2018</h3>
+    <h3 className="Layout__header">Ukrainian population changes through 1990-2018</h3>
     <div className="Layout__range-placeholder">
       <Range value={year} onChange={setYear} />
     </div>
@@ -26,5 +26,5 @@ export default compose(
     Range: YearRange,
     Legend: Legend
   }),
-  withState("year", "setYear", 1989)
+  withState("year", "setYear", 1990)
 )(Layout)

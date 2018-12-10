@@ -17,12 +17,14 @@ import Tooltip, {
 } from "../Tooltip/Tooltip"
 import "./Chart.css"
 import { CommonArea, MenArea, WomenArea } from "./Areas"
+import MenAreaDeath from "../MenAreaDeath/MenAreaDeath"
 
 const Chart = ({
   parentWidth: width,
   parentHeight: height,
   margin,
   data,
+  initialData,
 
   xScale,
   xScaleYears,
@@ -33,17 +35,41 @@ const Chart = ({
   totalYearValue
 }) => (
   <div className="Chart">
-    <div className="Chart__total-year-value">Total amount for {year}: {totalYearValue}</div>
+    <div className="Chart__total-year-value">
+      Total amount for {year}: {format("~s")(totalYearValue)}
+    </div>
     <Tooltip width={width} height={height} margin={margin} xScale={xScale} yScale={yScale} data={data} year={year}>
       <svg width={width} height={height}>
         <Group top={margin.top} left={margin.left}>
           <GridRows scale={yScale} width={width - margin.left - margin.right} />
           <GridColumns numTicks={20} scale={xScale} height={height - margin.top - margin.bottom} />
 
-          <AxisTop numTicks={20} scale={xScaleYears} top={0} tickFormat={format("")} />
-          <AxisBottom numTicks={20} scale={xScale} top={height - margin.bottom - margin.top} label="Age" />
-          <AxisLeft scale={yScale} label="Population" tickFormat={format("~s")} />
+          <AxisTop
+            tickClassName="Chart__tick"
+            hideAxisLine={true}
+            numTicks={20}
+            scale={xScaleYears}
+            top={0}
+            tickFormat={format("")}
+          />
+          <AxisBottom
+            tickClassName="Chart__tick"
+            hideAxisLine={true}
+            numTicks={20}
+            scale={xScale}
+            top={height - margin.bottom - margin.top}
+            label="Age"
+          />
+          <AxisLeft
+            tickClassName="Chart__tick"
+            hideAxisLine={true}
+            scale={yScale}
+            label="Population"
+            tickFormat={format("~s")}
+          />
           <AxisRight
+            tickClassName="Chart__tick"
+            hideAxisLine={true}
             left={width - margin.left - margin.right}
             scale={yScale}
             label="Population"
@@ -53,6 +79,8 @@ const Chart = ({
           <CommonArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
           <WomenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
           <MenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
+
+          <MenAreaDeath data={initialData} year={year} xScale={xScale} height={height} width={width} margin={margin} />
 
           <SVGContext />
           <MenTooltipSVG />
@@ -74,19 +102,19 @@ const Chart = ({
 const enhance = compose(
   defaultProps({
     margin: { top: 40, bottom: 40, left: 80, right: 40 },
-    year: 1989
+    year: 1990
   }),
   withState("data", "setData"),
   withParentSize,
   withProps(async ({ data, setData }) => {
     if (!data) {
-      const initial_data = await csv("population_by_age_sex_year.csv", ({ age, men, women, year }) => ({
+      const initialData = await csv("population_by_age_sex_year.csv", ({ age, men, women, year }) => ({
         age: Number(age),
         men: Number(men),
         women: Number(women),
         year: Number(year)
       }))
-      const data = initial_data.filter(({ age }) => age >= 0)
+      const data = initialData.filter(({ age }) => age >= 0)
       setData(data)
     }
   }),
@@ -97,7 +125,10 @@ const enhance = compose(
       .range([height - margin.top - margin.bottom, 0])
       .domain([0, max(data.map(({ men, women }) => men + women)) + 100000])
   })),
-  withProps(({ data, year }) => ({ data: data.filter(data => data.year === year) })),
+  withProps(({ data, year }) => ({
+    data: data.filter(data => data.year === year),
+    initialData: data
+  })),
   withProps(({ data, parentWidth: width, margin, year }) => ({
     xScale: scaleLinear()
       .range([0, width - margin.left - margin.right])

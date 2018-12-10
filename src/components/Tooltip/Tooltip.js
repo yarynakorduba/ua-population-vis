@@ -35,14 +35,16 @@ export const SVGContext = compose(
       onMouseLeave={hideTooltip}
     />
     {tooltipOpen && (
-      <Line
-        from={{ x: tooltipLeft, y: 0 }}
-        to={{ x: tooltipLeft, y: height - margin.top - margin.bottom }}
-        stroke="black"
-        strokeWidth={1}
-        style={{ pointerEvents: "none" }}
-        strokeDasharray="2,2"
-      />
+      <>
+        <Line
+          from={{ x: tooltipLeft, y: 0 }}
+          to={{ x: tooltipLeft, y: height - margin.top - margin.bottom }}
+          stroke="black"
+          strokeWidth={1}
+          style={{ pointerEvents: "none" }}
+          strokeDasharray="2,2"
+        />
+      </>
     )}
   </Group>
 ))
@@ -62,16 +64,26 @@ const commonTooltip = compose(
   withProps(({ yScale, tooltipData: { women, men } }) => ({ top: yScale(women + men) }))
 )
 
-export const MenTooltipSVG = menTooltip(({ top, tooltipLeft }) => (
-  <circle
-    cy={top - 1}
-    cx={tooltipLeft}
-    r={4}
-    fill="rgba(41, 128, 185, 1.000)"
-    stroke="white"
-    strokeWidth={2}
-    style={{ pointerEvents: "none" }}
-  />
+export const MenTooltipSVG = menTooltip(({ top, tooltipLeft, margin, width }) => (
+  <>
+    <circle
+      cy={top - 1}
+      cx={tooltipLeft}
+      r={4}
+      fill="rgba(41, 128, 185, 1.000)"
+      stroke="white"
+      strokeWidth={2}
+      style={{ pointerEvents: "none" }}
+    />
+    <Line
+      from={{ x: 0, y: top }}
+      to={{ x: width - margin.left - margin.right, y: top }}
+      stroke="black"
+      strokeWidth={1}
+      style={{ pointerEvents: "none" }}
+      strokeDasharray="2,2"
+    />
+  </>
 ))
 export const MenTooltipHTML = menTooltip(({ tooltipData: { men }, margin, tooltipLeft, top }) => (
   <Tooltip top={top + 26} left={tooltipLeft - 5}>
@@ -84,28 +96,48 @@ export const WomenTooltipHTML = womenTooltip(({ tooltipData: { women }, margin, 
     {numberFormat(women)}
   </Tooltip>
 ))
-export const WomenTooltipSVG = womenTooltip(({ top, tooltipLeft }) => (
-  <circle
-    cy={top - 1}
-    cx={tooltipLeft}
-    r={4}
-    fill="rgba(231, 76, 60, 1.000)"
-    stroke="white"
-    strokeWidth={2}
-    style={{ pointerEvents: "none" }}
-  />
+export const WomenTooltipSVG = womenTooltip(({ top, tooltipLeft, margin, width }) => (
+  <>
+    <circle
+      cy={top - 1}
+      cx={tooltipLeft}
+      r={4}
+      fill="rgba(231, 76, 60, 1.000)"
+      stroke="white"
+      strokeWidth={2}
+      style={{ pointerEvents: "none" }}
+    />
+    <Line
+      from={{ x: 0, y: top }}
+      to={{ x: width - margin.left - margin.right, y: top }}
+      stroke="black"
+      strokeWidth={1}
+      style={{ pointerEvents: "none" }}
+      strokeDasharray="2,2"
+    />
+  </>
 ))
 
-export const TotalTooltipSVG = commonTooltip(({ top, tooltipLeft }) => (
-  <circle
-    cy={top - 1}
-    cx={tooltipLeft}
-    r={4}
-    fill="rgba(0, 0, 0, 1.000)"
-    stroke="white"
-    strokeWidth={2}
-    style={{ pointerEvents: "none" }}
-  />
+export const TotalTooltipSVG = commonTooltip(({ top, tooltipLeft, margin, width }) => (
+  <>
+    <circle
+      cy={top - 1}
+      cx={tooltipLeft}
+      r={4}
+      fill="rgba(0, 0, 0, 1.000)"
+      stroke="white"
+      strokeWidth={2}
+      style={{ pointerEvents: "none" }}
+    />
+    <Line
+      from={{ x: 0, y: top }}
+      to={{ x: width - margin.left - margin.right, y: top }}
+      stroke="black"
+      strokeWidth={1}
+      style={{ pointerEvents: "none" }}
+      strokeDasharray="2,2"
+    />
+  </>
 ))
 export const TotalTooltipHTML = commonTooltip(({ tooltipData: { women, men }, top, margin, tooltipLeft }) => (
   <Tooltip top={top + margin.top - 35} left={tooltipLeft + margin.left - 30}>
