@@ -3,7 +3,6 @@ import { Group, withParentSize, AxisBottom, AxisLeft, GridRows, GridColumns, Axi
 import { scaleLinear, csv, max, format, sum } from "d3"
 
 import { branch, compose, defaultProps, renderComponent, withProps, withState } from "recompose"
-
 import Tooltip, {
   SVGContext,
   MenTooltipHTML,
@@ -17,7 +16,8 @@ import Tooltip, {
 } from "../Tooltip/Tooltip"
 import "./Chart.css"
 import { CommonArea, MenArea, WomenArea } from "./Areas"
-import MenAreaDeath from "../MenAreaDeath/MenAreaDeath"
+import Markers from "../Markers"
+import MenAreaDeath from "../MenAreaDeath"
 
 const Chart = ({
   parentWidth: width,
@@ -43,7 +43,7 @@ const Chart = ({
         <Group top={margin.top} left={margin.left}>
           <GridRows scale={yScale} width={width - margin.left - margin.right} />
           <GridColumns numTicks={20} scale={xScale} height={height - margin.top - margin.bottom} />
-
+          <svg width={width-120} className="Chart__markers"><Markers xScale={xScale} xScaleYears={xScaleYears} /></svg>
           <AxisTop
             tickClassName="Chart__tick"
             hideAxisLine={true}
@@ -66,6 +66,7 @@ const Chart = ({
             scale={yScale}
             label="Population"
             tickFormat={format("~s")}
+            axisClassName="Chart__axis"
           />
           <AxisRight
             tickClassName="Chart__tick"
@@ -75,7 +76,6 @@ const Chart = ({
             label="Population"
             tickFormat={format("~s")}
           />
-
           <CommonArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
           <WomenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />
           <MenArea data={data} yScale={yScale} x={({ age }) => xScale(age)} />

@@ -26,4 +26,11 @@
 
 .Chart__tick line {
   stroke: #eaf0f6;
+  background: white;
+}
+
+.Chart__markers {
+  overflow: hidden;
+  padding-left: 100px;
+  padding-right: 100px;
 }
