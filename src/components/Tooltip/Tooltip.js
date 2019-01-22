@@ -54,7 +54,10 @@ export const tooltipContext = compose(
   branch(({ tooltipOpen }) => !tooltipOpen, renderNothing)
 )
 
-const menTooltip = compose(tooltipContext, withProps(({ yScale, tooltipData: { men } }) => ({ top: yScale(men) })))
+const menTooltip = compose(
+  tooltipContext,
+  withProps(({ yScale, tooltipData: { men } }) => ({ top: yScale(men) }))
+)
 const womenTooltip = compose(
   tooltipContext,
   withProps(({ yScale, tooltipData: { women } }) => ({ top: yScale(women) }))

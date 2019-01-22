@@ -43,7 +43,9 @@ const Chart = ({
         <Group top={margin.top} left={margin.left}>
           <GridRows scale={yScale} width={width - margin.left - margin.right} />
           <GridColumns numTicks={20} scale={xScale} height={height - margin.top - margin.bottom} />
-          <svg width={width-120} className="Chart__markers"><Markers xScale={xScale} xScaleYears={xScaleYears} /></svg>
+          <svg width={width - 120} className="Chart__markers">
+            <Markers xScale={xScale} xScaleYears={xScaleYears} />
+          </svg>
           <AxisTop
             tickClassName="Chart__tick"
             hideAxisLine={true}

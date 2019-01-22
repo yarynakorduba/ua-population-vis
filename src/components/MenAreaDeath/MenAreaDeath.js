@@ -5,10 +5,13 @@ import { scaleBand, scaleLinear } from "d3"
 import { Group, Bar } from "@vx/vx"
 const MenAreaDeath = compose(
   withProps(({ data, year, width, margin }) => {
-    const dataForCurrentYear = compose(tail, filter(({ year: y }) => y === year))(data)
+    const dataForCurrentYear = compose(
+      tail,
+      filter(({ year: y }) => y === year)
+    )(data)
     const dataForPrevYear = compose(filter(({ year: y }) => y === year - 1))(data)
     const deathData = zipWith(
-      (prev, current) => (prev.men + prev.women) * 100 / (current.men + current.women),
+      (prev, current) => ((prev.men + prev.women) * 100) / (current.men + current.women),
       dataForPrevYear,
       dataForCurrentYear
     )

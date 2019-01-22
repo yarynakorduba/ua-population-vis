@@ -17,8 +17,8 @@ const Legend = () => (
       Women population
     </div>
     <div className="Legend__row">
-      <div className="Legend__indicator Legend__indicator_death-rate" />
-      {" "}Death/Emigration rate in comparison to the previous year
+      <div className="Legend__indicator Legend__indicator_death-rate" /> Death/Emigration rate in comparison to the
+      previous year
     </div>
   </div>
 )

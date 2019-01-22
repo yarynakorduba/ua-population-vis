@@ -4,6 +4,7 @@ import { compose, defaultProps, withState } from "recompose"
 import "./Layout.css"
 import YearRange from "../YearRange"
 import Legend from "../Legend"
+import Description from "../Description"
 
 const Layout = ({ year, setYear, Diagram, Range, Legend }) => (
   <div className="Layout">
@@ -16,6 +17,9 @@ const Layout = ({ year, setYear, Diagram, Range, Legend }) => (
     </div>
     <div className="Layout__legend-placeholder">
       <Legend />
+    </div>
+    <div className="Layout__description-placeholder">
+      <Description />
     </div>
   </div>
 )

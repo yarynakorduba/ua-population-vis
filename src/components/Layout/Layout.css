@@ -1,4 +1,7 @@
 .Layout {
+  margin-right: 10%;
+  margin-left: 3%;
+  color: #4a4a4a;
 }
 
 .Layout__header {
@@ -12,4 +15,8 @@
 .Layout__legend-placeholder {
   text-align: center;
   margin-top: 30px;
+}
+
+.Layout__description-placeholder {
+  margin: 5% 3% 10% 6%;
 }
